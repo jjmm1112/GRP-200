@@ -25,10 +25,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <iostream>
 
 #include "gpro/gpro-math/gproVector.h"
 
+using namespace std;
 
 void testVector()
 {
@@ -68,24 +69,45 @@ int main(int const argc, char const* const argv[])
 {
 	testVector();
 
-	#ifdef __cplusplus
-		// Includes for c++
-		std::ofstream file("openpls.txt");
-		std::string test = "hello";
-		file << test << std::endl;
-		file.close();
+	//#ifdef __cplusplus
+	//	// Includes for c++
+	//	std::ofstream file("openpls.txt");
+	//	std::string test = "hello";
+	//	file << test << std::endl;
+	//	file.close();
 
-	#else // !__cplusplus
-		FILE* fp = fopen("openpls.txt", "w");
-		if (fp) // Check if file opened
+	//#else // !__cplusplus
+	//	FILE* fp = fopen("openpls.txt", "w");
+	//	if (fp) // Check if file opened
+	//	{
+	//		char* test = "hello";
+	//		fprintf(fp, "%s\n", test);
+	//		fclose(fp);
+	//	}
+
+	//#endif // __cplusplus
+
+	const int image_width = 256;
+	const int image_height = 256;
+
+	cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
+
+	for (int j = image_height - 1; j >= 0; --j) 
+	{
+		for (int i = 0; i < image_width; ++i) 
 		{
-			char* test = "hello";
-			fprintf(fp, "%s\n", test);
-			fclose(fp);
+			double r = double(i) / (image_width - 1);
+			double g = double(j) / (image_height - 1);
+			double b = 0.25;
+
+			int ir = static_cast<int>(255.999 * r);
+			int ig = static_cast<int>(255.999 * g);
+			int ib = static_cast<int>(255.999 * b);
+
+			cout << ir << ' ' << ig << ' ' << ib << '\n';
 		}
+	}
 
-	#endif // __cplusplus
-
-	printf("\n\n");
-	system("pause");
+	/*printf("\n\n");
+	system("pause");*/
 }
