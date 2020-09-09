@@ -18,14 +18,16 @@
 	GPRO-Graphics1-TestConsole-main.c/.cpp
 	Main entry point source file for a Windows console application.
 
-	Modified by: ____________
-	Modified because: ____________
+	Modified by: Justin Marko
+	Modified because: Added code to finish project
 */
 
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <fstream>
+#include <string>
 
 #include "gpro/gpro-math/gproVector.h"
 
@@ -52,18 +54,6 @@ void testVector()
 	d = c + b + a;									// sum, init, sum, init, assign	-> d = (9, 12, 15)
 #endif	// __cplusplus
 }
-
-
-#ifdef __cplusplus
-	// Includes for c++
-	#include <fstream>
-	#include <string>
-
-#else // !__cplusplus
-	// Includes for c
-	#include <stdio.h>
-#endif // __cplusplus
-
 
 int main(int const argc, char const* const argv[])
 {
