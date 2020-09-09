@@ -28,36 +28,38 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vec3.h>
+#include <color.h>
 
-#include "gpro/gpro-math/gproVector.h"
+//#include "gpro/gpro-math/gproVector.h"
 
 using namespace std;
 
-void testVector()
-{
-	// test array vector initializers and functions
-	float3 av, bv, cv, dv;
-	vec3default(av);								// -> a = (0, 0, 0)
-	vec3init(bv, 1.0f, 2.0f, 3.0f);					// -> b = (1, 2, 3)
-	vec3copy(dv, vec3init(cv, 4.0f, 5.0f, 6.0f));	// -> d = c = (4, 5, 6)
-	vec3copy(av, dv);								// a = d			-> a = (4, 5, 6)
-	vec3add(dv, bv);								// d += b			-> d = (4 + 1, 5 + 2, 6 + 3) = (5, 7, 9)
-	vec3sum(dv, bv, bv);							// d = b + b		-> d = (1 + 1, 2 + 2, 3 + 3) = (2, 4, 6)
-	vec3add(vec3sum(dv, cv, bv), av);				// d = c + b + a	-> d = (4 + 1 + 4, 5 + 2 + 5, 6 + 3 + 6) = (9, 12, 15)
-
-#ifdef __cplusplus
-	// test all constructors and operators
-	vec3 a, b(1.0f, 2.0f, 3.0f), c(cv), d(c);		// default; init; copy array; copy
-	a = d;											// assign						-> a = (4, 5, 6)
-	d += b;											// add assign					-> d = (5, 7, 9)
-	d = b + b;										// sum, init, assign			-> d = (2, 4, 6)
-	d = c + b + a;									// sum, init, sum, init, assign	-> d = (9, 12, 15)
-#endif	// __cplusplus
-}
+//void testVector()
+//{
+//	// test array vector initializers and functions
+//	float3 av, bv, cv, dv;
+//	vec3default(av);								// -> a = (0, 0, 0)
+//	vec3init(bv, 1.0f, 2.0f, 3.0f);					// -> b = (1, 2, 3)
+//	vec3copy(dv, vec3init(cv, 4.0f, 5.0f, 6.0f));	// -> d = c = (4, 5, 6)
+//	vec3copy(av, dv);								// a = d			-> a = (4, 5, 6)
+//	vec3add(dv, bv);								// d += b			-> d = (4 + 1, 5 + 2, 6 + 3) = (5, 7, 9)
+//	vec3sum(dv, bv, bv);							// d = b + b		-> d = (1 + 1, 2 + 2, 3 + 3) = (2, 4, 6)
+//	vec3add(vec3sum(dv, cv, bv), av);				// d = c + b + a	-> d = (4 + 1 + 4, 5 + 2 + 5, 6 + 3 + 6) = (9, 12, 15)
+//
+//#ifdef __cplusplus
+//	// test all constructors and operators
+//	vec3 a, b(1.0f, 2.0f, 3.0f), c(cv), d(c);		// default; init; copy array; copy
+//	a = d;											// assign						-> a = (4, 5, 6)
+//	d += b;											// add assign					-> d = (5, 7, 9)
+//	d = b + b;										// sum, init, assign			-> d = (2, 4, 6)
+//	d = c + b + a;									// sum, init, sum, init, assign	-> d = (9, 12, 15)
+//#endif	// __cplusplus
+//}
 
 int main(int const argc, char const* const argv[])
 {
-	testVector();
+	//testVector();
 
 	const int image_width = 256;
 	const int image_height = 256;
@@ -71,15 +73,8 @@ int main(int const argc, char const* const argv[])
 		cout << "Lines remaining " << j << endl;
 		for (int i = 0; i < image_width; ++i) 
 		{
-			double r = double(i) / (image_width - 1);
-			double g = double(j) / (image_height - 1);
-			double b = 0.25;
-
-			int ir = static_cast<int>(255.999 * r);
-			int ig = static_cast<int>(255.999 * g);
-			int ib = static_cast<int>(255.999 * b);
-
-			file << ir << ' ' << ig << ' ' << ib << '\n'; // Outputs the 3 rgb values
+			color pixel_color(double(i) / (image_width - 1), double(j) / (image_height - 1), 0.25);
+			write_color(file, pixel_color);
 		}
 	}
 	file.close();

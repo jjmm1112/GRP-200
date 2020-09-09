@@ -29,7 +29,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\gpro\gpro-math\gproVector.h">
+    <ClInclude Include="..\..\..\include\gpro\gpro-math\vec3.h">
+      <Filter>Header Files\gpro\gpro-math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\color.h">
       <Filter>Header Files\gpro\gpro-math</Filter>
     </ClInclude>
   </ItemGroup>
