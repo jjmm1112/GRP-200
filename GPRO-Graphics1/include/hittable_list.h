@@ -1,3 +1,6 @@
+// Code framework created by Peter Shirley
+// Link: https://raytracing.github.io/books/RayTracingInOneWeekend.html
+
 #pragma once
 #ifndef HITTABLE_LIST_H
 #define HITTABLE_LIST_H
@@ -32,9 +35,9 @@ bool hittable_list::hit(const ray& r, double t_min, double t_max, hit_record& re
 	bool hit_anything = false;
 	double closest_so_far = t_max;
 
-	for (const auto& object : objects) // I have no idea what type of variable object is suposted to be
+	for (int i = 0; i < objects.size(); i++)
 	{
-		if (object->hit(r, t_min, closest_so_far, temp_rec)) 
+		if (objects[i]->hit(r, t_min, closest_so_far, temp_rec))
 		{
 			hit_anything = true;
 			closest_so_far = temp_rec.t;

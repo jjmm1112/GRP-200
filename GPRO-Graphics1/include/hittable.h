@@ -1,3 +1,6 @@
+// Code framework created by Peter Shirley
+// Link: https://raytracing.github.io/books/RayTracingInOneWeekend.html
+
 #pragma once
 #ifndef HITTABLE_H
 #define HITTABLE_H
@@ -8,8 +11,8 @@ struct hit_record
 {
 	point3 p;
 	vec3 normal;
-	double t;
-	bool front_face;
+	double t = 0;
+	bool front_face = false;
 
 	inline void set_face_normal(const ray& r, const vec3& outward_normal) 
 	{

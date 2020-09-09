@@ -1,3 +1,6 @@
+// Code framework created by Peter Shirley
+// Link: https://raytracing.github.io/books/RayTracingInOneWeekend.html
+
 #pragma once
 #ifndef SPHERE_H
 #define SPHERE_H
@@ -16,7 +19,7 @@ public:
 
 public:
 	point3 center;
-	double radius;
+	double radius = 0;
 };
 
 bool sphere::hit(const ray& r, double t_min, double t_max, hit_record& rec) const 

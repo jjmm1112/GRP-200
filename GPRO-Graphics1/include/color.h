@@ -1,3 +1,6 @@
+// Code framework created by Peter Shirley
+// Link: https://raytracing.github.io/books/RayTracingInOneWeekend.html
+
 #pragma once
 #ifndef COLOR_H
 #define COLOR_H
