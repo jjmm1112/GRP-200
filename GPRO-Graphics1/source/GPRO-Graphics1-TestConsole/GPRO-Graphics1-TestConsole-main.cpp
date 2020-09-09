@@ -69,28 +69,12 @@ int main(int const argc, char const* const argv[])
 {
 	testVector();
 
-	//#ifdef __cplusplus
-	//	// Includes for c++
-	//	std::ofstream file("openpls.txt");
-	//	std::string test = "hello";
-	//	file << test << std::endl;
-	//	file.close();
-
-	//#else // !__cplusplus
-	//	FILE* fp = fopen("openpls.txt", "w");
-	//	if (fp) // Check if file opened
-	//	{
-	//		char* test = "hello";
-	//		fprintf(fp, "%s\n", test);
-	//		fclose(fp);
-	//	}
-
-	//#endif // __cplusplus
-
 	const int image_width = 256;
 	const int image_height = 256;
 
-	cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
+	ofstream file("output.ppm");
+
+	file << "P3\n" << image_width << ' ' << image_height << "\n255\n";
 
 	for (int j = image_height - 1; j >= 0; --j) 
 	{
@@ -104,10 +88,8 @@ int main(int const argc, char const* const argv[])
 			int ig = static_cast<int>(255.999 * g);
 			int ib = static_cast<int>(255.999 * b);
 
-			cout << ir << ' ' << ig << ' ' << ib << '\n';
+			file << ir << ' ' << ig << ' ' << ib << '\n';
 		}
 	}
-
-	/*printf("\n\n");
-	system("pause");*/
+	file.close();
 }
