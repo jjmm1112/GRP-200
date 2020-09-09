@@ -53,9 +53,38 @@ void testVector()
 }
 
 
+#ifdef __cplusplus
+	// Includes for c++
+	#include <fstream>
+	#include <string>
+
+#else // !__cplusplus
+	// Includes for c
+	#include <stdio.h>
+#endif // __cplusplus
+
+
 int main(int const argc, char const* const argv[])
 {
 	testVector();
+
+	#ifdef __cplusplus
+		// Includes for c++
+		std::ofstream file("openpls.txt");
+		std::string test = "hello";
+		file << test << std::endl;
+		file.close();
+
+	#else // !__cplusplus
+		FILE* fp = fopen("openpls.txt", "w");
+		if (fp) // Check if file opened
+		{
+			char* test = "hello";
+			fprintf(fp, "%s\n", test);
+			fclose(fp);
+		}
+
+	#endif // __cplusplus
 
 	printf("\n\n");
 	system("pause");
