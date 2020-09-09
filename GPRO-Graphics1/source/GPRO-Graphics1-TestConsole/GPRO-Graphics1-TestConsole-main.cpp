@@ -74,10 +74,11 @@ int main(int const argc, char const* const argv[])
 
 	ofstream file("output.ppm");
 
-	file << "P3\n" << image_width << ' ' << image_height << "\n255\n";
+	file << "P3\n" << image_width << ' ' << image_height << "\n255\n"; // Displays the image size
 
 	for (int j = image_height - 1; j >= 0; --j) 
 	{
+		cout << "Lines remaining " << j << endl;
 		for (int i = 0; i < image_width; ++i) 
 		{
 			double r = double(i) / (image_width - 1);
@@ -88,8 +89,10 @@ int main(int const argc, char const* const argv[])
 			int ig = static_cast<int>(255.999 * g);
 			int ib = static_cast<int>(255.999 * b);
 
-			file << ir << ' ' << ig << ' ' << ib << '\n';
+			file << ir << ' ' << ig << ' ' << ib << '\n'; // Outputs the 3 rgb values
 		}
 	}
 	file.close();
+
+	cout << "Done" << endl;
 }
