@@ -80,8 +80,6 @@ color ray_color(const ray& r, const hittable& world)
 
 int main(int const argc, char const* const argv[])
 {
-	//testVector();
-
 	// Image
 	const double aspect_ratio = 16.0 / 9.0;
 	const int image_width = 400;
@@ -102,11 +100,10 @@ int main(int const argc, char const* const argv[])
 	vec3 vertical = vec3(0, viewport_height, 0);
 	vec3 lower_left_corner = origin - horizontal / 2 - vertical / 2 - vec3(0, 0, focal_length);
 
+	// Goes through each pixel and determins the color and prints it to the file
 	ofstream file("output.ppm");
-
-	file << "P3\n" << image_width << ' ' << image_height << "\n255\n"; // Displays the image size
-
-	for (int j = image_height - 1; j >= 0; --j) 
+	file << "P3\n" << image_width << ' ' << image_height << "\n255\n";
+	for (int j = image_height - 1; j >= 0; --j)
 	{
 		cout << "Lines remaining " << j << endl;
 		for (int i = 0; i < image_width; ++i) 
@@ -118,7 +115,8 @@ int main(int const argc, char const* const argv[])
 			write_color(file, pixel_color);
 		}
 	}
-	file.close();
-
 	cout << "Done" << endl;
+	// End
+
+	file.close(); // Closes the file
 }
