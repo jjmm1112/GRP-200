@@ -31,21 +31,21 @@
 
 #include "ray.h"
 
-struct hit_record 
+struct hit_record // Contains a point of hit and a front face
 {
 	point3 p;
 	vec3 normal;
 	double t = 0;
 	bool front_face = false;
 
-	inline void set_face_normal(const ray& r, const vec3& outward_normal) 
+	inline void set_face_normal(const ray& r, const vec3& outward_normal) // Sets which direction the face normal points
 	{
 		front_face = dot(r.direction(), outward_normal) < 0;
 		normal = front_face ? outward_normal : -outward_normal;
 	}
 };
 
-class hittable 
+class hittable // Contains a hit function that can be inhearited for use elsewhere
 {
 	public:
 		virtual bool hit(const ray& r, double t_min, double t_max, hit_record& rec) const = 0;

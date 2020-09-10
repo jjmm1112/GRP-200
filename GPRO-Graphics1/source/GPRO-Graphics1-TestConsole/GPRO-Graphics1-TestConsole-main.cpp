@@ -65,7 +65,7 @@ using namespace std;
 //#endif	// __cplusplus
 //}
 
-color ray_color(const ray& r, const hittable& world) 
+color ray_color(const ray& r, const hittable& world) // Gets the color from whatever the given ray hit
 {
 	hit_record rec;
 	if (world.hit(r, 0, infinity, rec)) 
@@ -78,7 +78,7 @@ color ray_color(const ray& r, const hittable& world)
 	return (1.0 - t) * color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0);
 }
 
-int main(int const argc, char const* const argv[])
+int main(int const argc, char const* const argv[]) // Creates the image based on what is in the world
 {
 	// Image
 	const double aspect_ratio = 16.0 / 9.0;

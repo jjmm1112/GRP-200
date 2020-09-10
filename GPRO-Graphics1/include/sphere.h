@@ -32,7 +32,7 @@
 #include "hittable.h"
 #include "vec3.h"
 
-class sphere : public hittable 
+class sphere : public hittable // Contains the center point and radius of a created sphere
 {
 public:
 	sphere() {}
@@ -46,7 +46,7 @@ public:
 	double radius = 0;
 };
 
-bool sphere::hit(const ray& r, double t_min, double t_max, hit_record& rec) const 
+bool sphere::hit(const ray& r, double t_min, double t_max, hit_record& rec) const // Checks if the given ray hit the sphere
 {
 	vec3 oc = r.origin() - center;
 	double a = r.direction().length_squared();

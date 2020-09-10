@@ -31,7 +31,7 @@
 
 #include "vec3.h"
 
-class ray 
+class ray // Contains a direction and orientation
 {
 	public:
 		ray() {}

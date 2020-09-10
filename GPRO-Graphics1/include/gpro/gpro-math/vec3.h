@@ -34,7 +34,7 @@
 
 using std::sqrt;
 
-class vec3
+class vec3 // Contains a list of 3 doubles to be used as a point or color or whatever else in needed
 {
 public:
 	vec3() : e{ 0,0,0 } {}
