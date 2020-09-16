@@ -1,3 +1,4 @@
+//Output the screen-space or UV coordinate as a static gradient
 vec4 myEffect0(in vec2 coord)
 {
     vec2 uv = coord / iResolution.xy;
@@ -6,12 +7,69 @@ vec4 myEffect0(in vec2 coord)
 	return vec4(color, alpha); 
 }
 
+//Static checkerboard pattern with perfectly square checkers
+vec4 myEffect1(in vec2 coord)
+{
+    float squareSize = 50.0f;// Square size in pixels
+    vec2 uv = coord / squareSize; // Divides the coords into squares
+    vec3 color;
+    float alpha = 1.0;
+    
+    
+    if(mod(floor(uv.x), 2.0f) == 0.0f)// Checks if the x square is even
+    {
+        if(mod(floor(uv.y), 2.0f) == 0.0f)// Checks if the y square is even
+        {
+            color = vec3(1.0f, 1.0f, 1.0f);// Sets color to white
+        }
+        
+        else// The y square is odd
+        {
+            color = vec3(0.0f, 0.0f, 0.0f);// Sets color to black
+        }
+            
+    }
+    
+    else// The x square is odd
+    {
+        if(mod(floor(uv.y), 2.0f) == 0.0f)// Checks if the x square is even
+        {
+            color = vec3(0.0f, 0.0f, 0.0f);// Sets color to white
+            
+        }
+        
+        else// The y square is odd
+        {
+            color = vec3(1.0f, 1.0f, 1.0f);// Sets color to black
+        }
+    }
+    
+    return vec4(color, alpha); 
+}
+
+//Circle whose color and size change over time
+vec4 myEffect2(in vec2 coord)
+{
+    vec3 color;
+    float alpha = 1.0;
+    return vec4(color, alpha); 
+}
+
+//Full-screen psychedelic effect
+vec4 myEffect3(in vec2 coord)
+{
+    vec3 color;
+    float alpha = 1.0;
+    return vec4(color, alpha); 
+}
+
+//Main display
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
     
     //fragColor = vec4(1.0);//(1.0, 1.0, 1.0, 1.0);
     
-    fragColor = myEffect0(fragCoord);
+    fragColor = myEffect1(fragCoord);
     
     
     // Normalized pixel coordinates (from 0 to 1)
