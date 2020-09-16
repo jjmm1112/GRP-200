@@ -50,9 +50,34 @@ vec4 myEffect1(in vec2 coord)
 //Circle whose color and size change over time
 vec4 myEffect2(in vec2 coord)
 {
-    vec3 color;
+    vec2 circleCenter = vec2(iResolution.xy / 2.0f);
+    float circleSize = iTime * 10.0f;// Changes circle size based on time
+    vec3 colorC;// Circle color
+    vec3 colorB;// Background color
     float alpha = 1.0;
-    return vec4(color, alpha); 
+    
+    //Colors the circle and background
+    colorC = 0.5 + 0.5*cos(iTime+vec3(0,2,4));// Changes color based on time
+    
+    colorB = vec3(1.0f, 1.0f, 1.0f) - colorC;// Sets background to the complementary color of the circle
+    
+    
+    //Creates the circle
+    
+    //Checks distance fo pixel from circle center
+    float d = sqrt(pow((coord.x - circleCenter.x), 2.0f) + pow((coord.y - circleCenter.y), 2.0f));
+    
+    if(d <= circleSize)// Checks if pixel is within the circle raduis
+    {
+        return vec4(colorC, alpha);// Returns the circle color
+    }
+    
+    else// Pixel is outside the circle radius
+    {
+        return vec4(colorB, alpha);// Returns the background color
+    }
+    
+    
 }
 
 //Full-screen psychedelic effect
@@ -65,11 +90,8 @@ vec4 myEffect3(in vec2 coord)
 
 //Main display
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
-{
-    
-    //fragColor = vec4(1.0);//(1.0, 1.0, 1.0, 1.0);
-    
-    fragColor = myEffect1(fragCoord);
+{ 
+    fragColor = myEffect3(fragCoord);
     
     
     // Normalized pixel coordinates (from 0 to 1)
