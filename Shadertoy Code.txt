@@ -1,3 +1,9 @@
+//Main file
+//Displays 4 different effects
+
+// Coded by Justin Marko
+// Code for effect 0 done in class
+
 //Output the screen-space or UV coordinate as a static gradient
 vec4 myEffect0(in vec2 coord)
 {
@@ -83,23 +89,24 @@ vec4 myEffect2(in vec2 coord)
 //Full-screen psychedelic effect
 vec4 myEffect3(in vec2 coord)
 {
+    float squareSize = 10.0f;// Square size in pixels
+    vec2 uv = coord / squareSize; // Divides the coords into squares
     vec3 color;
     float alpha = 1.0;
+    
+    color = 0.5 + 0.5*cos(iTime * 10.0f+uv.xyx+vec3(0,2,4));
+    
     return vec4(color, alpha); 
 }
 
 //Main display
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 { 
-    fragColor = myEffect3(fragCoord);
+    fragColor = myEffect0(fragCoord);
     
+    //fragColor = myEffect1(fragCoord);
     
-    // Normalized pixel coordinates (from 0 to 1)
-    //vec2 uv = fragCoord/iResolution.xy;
-
-    // Time varying pixel color
-    //vec3 col = 0.5 + 0.5*cos(iTime+uv.xyx+vec3(0,2,4));
-
-    // Output to screen
-    //fragColor = vec4(col,1.0);
+    //fragColor = myEffect2(fragCoord);
+    
+    //fragColor = myEffect3(fragCoord);
 }
