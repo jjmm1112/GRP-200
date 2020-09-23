@@ -48,14 +48,17 @@ void calcRay(out vec4 rayDirection, out vec4 rayOrigin, in vec2 viewport, in flo
 //    radius: input radius of sphere
 //    rayDirection: input ray direction
 //    rayOrigin:    input ray origin
-bool hitSphere(in vec3 center, in float radius, in vec4 rayDirection, in vec4 rayOrigin)
+float hitSphere(in vec3 center, in float radius, in vec4 rayDirection, in vec4 rayOrigin)
 {
     vec3 oc = rayOrigin.xyz - center;
-    float a = dot(rayDirection, rayDirection);
-    float b = 2.0f * dot(oc, rayDirection.xyz);
-    float c = dot(oc, oc) - radius * radius;
-    float discriminant = b * b - 4.0f * a * c;
-    return (discriminant > 0.0f);
+    float a = rayDirection.x * rayDirection.x + rayDirection.y * rayDirection.y +
+        rayDirection.z * rayDirection.z;
+    
+    float halfB = dot(oc, rayDirection.xyz);
+    float c = (oc.x * oc.x + oc.y * oc.y + oc.z * oc.z) - radius * radius;
+    float discriminant = halfB * halfB - a * c;
+    
+    return discriminant < 0.0f ? -1.0f : (-halfB - sqrt(discriminant) ) / a;
 }
 
 
@@ -64,12 +67,15 @@ bool hitSphere(in vec3 center, in float radius, in vec4 rayDirection, in vec4 ra
 //    rayOrigin:    input ray origin
 vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin)
 {
-    if(hitSphere(vec3(0.0f, 0.0f, -1.0f), 0.5f, rayDirection, rayOrigin))
+    float t = hitSphere(vec3(0.0f, 0.0f, -1.0f), 0.5f, rayDirection, rayOrigin);
+    
+    if(t > 0.0f)
     {
-        return vec4(1.0f, 0.0f, 0.0f, 1.0f);
+        vec3 N = vec3 ((rayOrigin.xyz + t * rayDirection.xyz) - vec3(0.0f, 0.0f, -1.0f));
+        return vec4((0.5f * vec3(N.x+1.0f, N.y+1.0f, N.z+1.0f)), 1.0f);
     }
         
-    float t = 0.5f  * (rayDirection.y + 1.0f);
+    t = 0.5f  * (rayDirection.y + 1.0f);
     
     return mix(vec4(1.0f, 1.0f, 1.0f, 1.0f), vec4(0.0f, 0.3f, 1.0f, 1.0f), t);
 }
