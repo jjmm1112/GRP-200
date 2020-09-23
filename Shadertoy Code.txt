@@ -49,9 +49,9 @@ void calcRay(out vec4 rayDirection, out vec4 rayOrigin, in vec2 viewport, in flo
 //    rayOrigin:    input ray origin
 vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin)
 {
-    // DUMMY RESULT: OUTPUT RAY DIRECTION AS-IS
-    // -> what does the ray look like as color?
-    return rayDirection;
+    float t = 0.5f  * (rayDirection.y + 1.0f);
+    
+    return mix(vec4(1.0f, 1.0f, 1.0f, 1.0f), vec4(0.0f, 0.3f, 1.0f, 1.0f), t);
 }
 
 
