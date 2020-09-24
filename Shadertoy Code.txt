@@ -74,6 +74,13 @@ vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin)
         vec3 N = vec3 ((rayOrigin.xyz + t * rayDirection.xyz) - vec3(0.0f, 0.0f, -1.0f));
         return vec4((0.5f * vec3(N.x+1.0f, N.y+1.0f, N.z+1.0f)), 1.0f);
     }
+    
+    t = hitSphere(vec3(0.0f, -100.5f, -1.0f), 100.0f, rayDirection, rayOrigin);
+    
+    if(t > 0.0f)
+    {
+        return vec4(0.2f, 1.0f, 0.2f, 1.0f);
+    }
         
     t = 0.5f  * (rayDirection.y + 1.0f);
     
