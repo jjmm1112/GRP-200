@@ -1,3 +1,14 @@
+// Code from Dave_Hoskins https://www.shadertoy.com/view/4djSRW
+// hash12: generates a random number
+//    p: input coordinates of pixel
+float hash12(vec2 p)
+{
+	vec3 p3  = fract(vec3(p.xyx) * .1031);
+    p3 += dot(p3, p3.yzx + 33.33);
+    return fract((p3.x + p3.y) * p3.z);
+}
+
+
 // calcViewport: calculate the viewing plane (viewport) coordinate
 //    viewport:       output viewing plane coordinate
 //    ndc:            output normalized device coordinate
@@ -67,7 +78,8 @@ float hitSphere(in vec3 center, in float radius, in vec4 rayDirection, in vec4 r
 //    rayOrigin:    input ray origin
 vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin)
 {
-    float t = hitSphere(vec3(0.0f, 0.0f, -1.0f), 0.5f, rayDirection, rayOrigin);
+    float t = hitSphere(vec3(0.0f + cos(iTime * 2.0f) * 0.2f, 0.0f + sin(iTime * 2.0f) * 0.2f, -1.0f),
+                        0.5f, rayDirection, rayOrigin);
     
     if(t > 0.0f)
     {
@@ -97,22 +109,28 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
     vec2 viewport, ndc, uv, resolutionInv;
     float aspect;
     const float viewportHeight = 2.0, focalLength = 1.0;
+    float samplesPerPixel = 100.0f;
 
     // ray
     vec4 rayDirection, rayOrigin;
 
     // setup
-    calcViewport(viewport, ndc, uv, aspect, resolutionInv,
-                 viewportHeight, fragCoord, iResolution.xy);
-    calcRay(rayDirection, rayOrigin,
-            viewport, focalLength);
+    calcViewport(viewport, ndc, uv, aspect, resolutionInv, viewportHeight, fragCoord, iResolution.xy);
+    calcRay(rayDirection, rayOrigin, viewport, focalLength);
 
     // color
-    fragColor = calcColor(rayDirection, rayOrigin);
-
-    // TEST COLOR:
-    //  -> what do the other things calculated above look like?
-    //fragColor = vec4(viewport, 0.0, 0.0);
-    //fragColor = vec4(ndc, 0.0, 0.0);
-    //fragColor = vec4(uv, 0.0, 0.0);
+    vec4 color = vec4(0.0f);
+    
+    for(float i = 0.0f; i < samplesPerPixel; ++i)
+    {
+        vec4 tRayDirection = rayDirection;
+        
+        tRayDirection.x = tRayDirection.x + hash12(fragCoord);
+        tRayDirection.y = tRayDirection.y + hash12(fragCoord);
+        
+        color += calcColor(rayDirection, rayOrigin);
+    }
+    float scale = 1.0f / samplesPerPixel;
+    color.xyzw *= scale;
+    fragColor = color;
 }
