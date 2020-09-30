@@ -75,6 +75,20 @@ void initSphere(out sSphere sphere, in vec3 center, in float radius)
     sphere.radius = radius;
 }
 
+struct sPointLight
+{
+    vec4 center;
+    vec4 color;
+    float intensity;
+};
+
+void initPointLight(out sPointLight pointLight, in vec3 center, in vec4 color, in float intensity)
+{
+    pointLight.center = asPoint(center);
+    pointLight.color = color;
+    pointLight.intensity = intensity;
+}
+
 
 float lenSq(vec2 x)
 {
@@ -90,6 +104,9 @@ vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin)
     // SCENE
     sSphere sphere;
     initSphere(sphere, vec3(0.0, 0.0, -4.0), 0.5);
+    
+    sPointLight pointlight;
+    initPointLight(pointlight, vec3(0.0), vec4(1.0), 10);
     
     // TEST
     vec3 dp;
