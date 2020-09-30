@@ -95,6 +95,17 @@ float lenSq(vec2 x)
     return dot(x, x);
 }
 
+float pow64(float x)
+{
+    x = x * x;
+    x = x * x;
+    x = x * x;
+    x = x * x;
+    x = x * x;
+    x = x * x;
+    return x;
+}
+
 
 // calcColor: calculate the color of a pixel given a ray
 //    rayDirection: input ray direction
@@ -106,7 +117,7 @@ vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin)
     initSphere(sphere, vec3(0.0, 0.0, -4.0), 0.5);
     
     sPointLight pointLight;
-    initPointLight(pointLight, vec3(2.0, 2.0, 0.0), vec4(1.0), 20.0);
+    initPointLight(pointLight, vec3(3.0, 3.0, 0.0), vec4(1.0), 20.0);
     
     
     // TEST
@@ -140,7 +151,19 @@ vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin)
         vec4 Cd = vec4(normal * 0.5 + 0.5, 1.0);
         vec4 Cl = vec4(1.0, 1.0, 1.0, 1.0);
         
-        vec4 C = Id * Cd * Cl;
+        //PHONG REFLECTANCE
+        vec4 V = normalize(rayOrigin - sphere.center);
+        vec3 R = reflect(-L.xyz, normal);
+        float Ks = max(0.0, dot(V.xyz, R));
+        
+        float Is = pow64(Ks);
+        
+        float Ia = 1.0;
+        vec4 Ca = vec4(0.0);
+        vec4 Cs = vec4(1.0);
+        
+        
+        vec4 C = Ia * Ca + (Id * Cd + Is * Cs) * Cl;
         
         return C;
     }
