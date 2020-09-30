@@ -95,6 +95,7 @@ float lenSq(vec2 x)
     return dot(x, x);
 }
 
+// pow256: pows the given float to 256
 float pow256(float x)
 {
     x = x * x;
@@ -159,6 +160,7 @@ vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin)
         vec4 Ca = vec4(0.0);
         vec4 Cs = vec4(1.0);
         
+        //Variables for the for loop
         sPointLight pl;
         
         vec4 L;
