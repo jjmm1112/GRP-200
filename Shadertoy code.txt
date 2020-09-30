@@ -105,8 +105,9 @@ vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin)
     sSphere sphere;
     initSphere(sphere, vec3(0.0, 0.0, -4.0), 0.5);
     
-    sPointLight pointlight;
-    initPointLight(pointlight, vec3(0.0), vec4(1.0), 10);
+    sPointLight pointLight;
+    initPointLight(pointLight, vec3(2.0, 2.0, 0.0), vec4(1.0), 20.0);
+    
     
     // TEST
     vec3 dp;
@@ -126,7 +127,22 @@ vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin)
         
         vec3 normal = (position - sphere.center.xyz) / sphere.radius;
         
-        return vec4(normal * 0.5 + 0.5, 1.0);
+        //DIFFUSE
+    	vec4 L = normalize(pointLight.center - sphere.center);
+        float Kd = max(0.0, dot(normal, L.xyz));
+        
+        float Il = pointLight.intensity;
+        float d = distance(pointLight.center, sphere.center);
+        
+        float Il2 = 1.0 / (1.0 + d / Il + ((d * d) / (Il * Il)));
+        
+        float Id = Kd * Il2;
+        vec4 Cd = vec4(normal * 0.5 + 0.5, 1.0);
+        vec4 Cl = vec4(1.0, 1.0, 1.0, 1.0);
+        
+        vec4 C = Id * Cd * Cl;
+        
+        return C;
     }
 	
 	// BACKGROUND
