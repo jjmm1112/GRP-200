@@ -119,8 +119,16 @@ vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin)
     initSphere(sphere, vec3(0.0, 0.0, -4.0), 0.5);
     
     sPointLight pointLight;
-    initPointLight(pointLight, vec3(3.0, 3.0, 0.0), vec4(1.0), 20.0);
+    initPointLight(pointLight, vec3(3.0 * cos(iTime * 5.0), 3.0 * sin(iTime * 5.0), 0.0),
+                   vec4(0.5, 0.5, 1.0, 1.0), 20.0);
     
+    sPointLight pointLight2;
+    initPointLight(pointLight2, vec3(-3.0 * cos(iTime * 5.0), -3.0 * sin(iTime * 5.0), 0.0),
+                   vec4(1.0, 0.5, 0.5, 1.0), 20.0);
+    
+    int lights = 2;
+    
+    sPointLight[] pointLights = sPointLight[] (pointLight, pointLight2);
     
     // TEST
     vec3 dp;
@@ -141,32 +149,52 @@ vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin)
         vec3 normal = (position - sphere.center.xyz) / sphere.radius;
         
         //DIFFUSE
-    	vec4 L = normalize(pointLight.center - sphere.center);
-        float Kd = max(0.0, dot(normal, L.xyz));
-        
-        float Il = pointLight.intensity;
-        float d = distance(pointLight.center, sphere.center);
-        
-        float Il2 = 1.0 / (1.0 + d / Il + ((d * d) / (Il * Il)));
-        
-        float Id = Kd * Il2;
         vec4 Cd = vec4(normal * 0.5 + 0.5, 1.0);
-        vec4 Cl = vec4(1.0, 1.0, 1.0, 1.0);
+        
         
         //PHONG REFLECTANCE
-        vec4 V = normalize(rayOrigin - sphere.center);
+        vec4 V = normalize(rayOrigin - sphere.center); // efficient?
         
         float Ia = 1.0;
         vec4 Ca = vec4(0.0);
         vec4 Cs = vec4(1.0);
         
-        vec4 H = normalize(L + V);
+        sPointLight pl;
         
-        float Ks = dot(normal, H.xyz);
+        vec4 L;
+        float Kd;
+        float Il;
+        float d;
+        float Il2;
+        float Id;
         
-        float Is = pow256(Ks);
+        vec4 Cl;
         
-        vec4 C = Ia * Ca + (Id * Cd + Is * Cs) * Cl;
+        vec4 H;
+        float Ks;
+        float Is;
+        
+        vec4 C = Ia * Ca;
+        
+        for(int i = 0; i < lights; i++)
+        {
+            pl = pointLights[i];
+            
+            L = normalize(pl.center - sphere.center); // efficient?
+            Kd = max(0.0, dot(normal, L.xyz));
+            Il = pl.intensity;
+        	d = distance(pl.center, sphere.center); // efficient?
+            Il2 = 1.0 / (1.0 + d / Il) * (1.0 + d / Il);
+            Id = Kd * Il2;
+            
+        	Cl = pl.color;
+            
+            H = normalize(L + V); // efficient?
+        	Ks = dot(normal, H.xyz);
+        	Is = pow256(Ks); 
+            
+            C += (Id * Cd + Is * Cs) * Cl;
+        }
         
         return C;
     }
