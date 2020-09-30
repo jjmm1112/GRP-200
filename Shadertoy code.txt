@@ -95,8 +95,10 @@ float lenSq(vec2 x)
     return dot(x, x);
 }
 
-float pow64(float x)
+float pow256(float x)
 {
+    x = x * x;
+    x = x * x;
     x = x * x;
     x = x * x;
     x = x * x;
@@ -153,15 +155,16 @@ vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin)
         
         //PHONG REFLECTANCE
         vec4 V = normalize(rayOrigin - sphere.center);
-        vec3 R = reflect(-L.xyz, normal);
-        float Ks = max(0.0, dot(V.xyz, R));
-        
-        float Is = pow64(Ks);
         
         float Ia = 1.0;
         vec4 Ca = vec4(0.0);
         vec4 Cs = vec4(1.0);
         
+        vec4 H = normalize(L + V);
+        
+        float Ks = dot(normal, H.xyz);
+        
+        float Is = pow256(Ks);
         
         vec4 C = Ia * Ca + (Id * Cd + Is * Cs) * Cl;
         
