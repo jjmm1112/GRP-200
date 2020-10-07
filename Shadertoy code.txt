@@ -110,9 +110,8 @@ struct sViewport
 //    focalLength:    input distance between viewer and viewing plane
 //    fragCoord:      input coordinate of current fragment (in pixels)
 //    resolution:     input resolution of screen (in pixels)
-void initViewport(out sViewport vp,
-                  in sScalar viewportHeight, in sScalar focalLength,
-                  in sCoord fragCoord, in sDCoord resolution)
+void initViewport(out sViewport vp, in sScalar viewportHeight, in sScalar focalLength, in sCoord fragCoord,
+                  in sDCoord resolution)
 {
     vp.pixelCoord = fragCoord;
     vp.resolution = resolution;
@@ -169,13 +168,45 @@ void initRayOrtho(out sRay ray,
 //------------------------------------------------------------
 // RENDERING FUNCTIONS
 
+color4 fade(in sCoord loc)
+{
+    return mix(texture(iChannel0, loc), texture(iChannel2, loc), mod(iTime / 5.0, 1.0));
+}
+
 sCoord wave(in sCoord originalLocation)
 {
     sCoord deformedLocation;
+    deformedLocation = originalLocation;
     
-    // do stuff;
+    deformedLocation.x += cos(deformedLocation.x * 10.0 + iTime) * 0.3;
+    deformedLocation.y += sin(deformedLocation.y * 10.0 + iTime) * 0.3;
     
     return deformedLocation;
+}
+
+color4 light(in sCoord loc, in sViewport vp)
+{
+    vec3 normal = vec3(0, 0, 1);
+    
+    vec3 lightPos = vec3(0, 0, 5);
+    
+    vec4 L; // Light vector
+    float Kd; // Diffuse coefficient
+    float Il; // Intensity
+    float d; // Distance
+    float Il2; // Attenuated intensity
+    float Id; // Diffuse intensity
+    
+    L = normalize(vec4(lightPos.xyz, 0.0) - vp.viewportPoint); //?
+    Kd = max(0.0, dot(normal, L.xyz));
+    
+    Il = 10.0;
+    d = distance(lightPos, vp.viewportPoint.xyz);//?
+    Il2 = 1.0 / (1.0 + d / Il) * (1.0 + d / Il);
+    
+    Id = Kd * Il2;
+    
+    return texture(iChannel0, loc) * vec4(1.0, 1.0, 1.0, 1.0) * Id;
 }
 
 // calcColor: calculate the color of current pixel
@@ -189,8 +220,16 @@ color4 calcColor(in sViewport vp, in sRay ray)
     sScalar ratio = res.y * vp.resolutionInv.y;
     sCoord loc = px / res;
     loc = ratio * loc + 0.25;
-    return mix(texture(iChannel0, loc), texture(iChannel2, loc), mod(iTime / 5.0, 1.0));
     
+    //return texture(iChannel0, loc); // Base image
+    
+    //return fade(loc); // Cross fade
+    
+    //return texture(iChannel0, wave(loc)); // Distortion
+    
+    return light(loc, vp); // Lighting
+    
+        
     //return vec4(normalize(vec3(vp.viewportPoint.xy, 1.0)), 1.0);
     
     // cube map
