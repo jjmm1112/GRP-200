@@ -188,8 +188,8 @@ color4 calcColor(in sViewport vp, in sRay ray)
     sDCoord res = iChannelResolution[0].xy;
     sScalar ratio = res.y * vp.resolutionInv.y;
     sCoord loc = px / res;
-    loc = ratio * loc + 0.1 * iTime;
-    //return texture(iChannel0, loc);
+    loc = ratio * loc + 0.25;
+    return mix(texture(iChannel0, loc), texture(iChannel2, loc), mod(iTime / 5.0, 1.0));
     
     //return vec4(normalize(vec3(vp.viewportPoint.xy, 1.0)), 1.0);
     
@@ -200,7 +200,7 @@ color4 calcColor(in sViewport vp, in sRay ray)
     // rotation matrix
     // cubeLoc = rotMat * cubeLoc;
     
-    return texture(iChannel1, cubeLoc);
+    //return texture(iChannel1, cubeLoc);
     
     
 }
