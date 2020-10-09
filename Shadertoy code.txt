@@ -249,13 +249,13 @@ color4 calcColor(in sViewport vp, in sRay ray, in sCoord fragCoord)
     loc = ratio * loc + 0.25;
     vec3 cubeLoc = ray.direction.xyz;
     
-    //return texture(iChannel0, loc); // Base image
+    return texture(iChannel0, loc); // Base image
     
-    //return fade(loc); // Cross fade
+    return fade(loc); // Cross fade
     
-    //return texture(iChannel0, wave(loc)); // Distortion
+    return texture(iChannel0, wave(loc)); // Distortion
     
-    //return light(loc, fragCoord); // Lighting
+    return light(loc, fragCoord); // Lighting
     
     return cubeRotate(cubeLoc, fragCoord); // Cube 
 }
