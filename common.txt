@@ -1,4 +1,5 @@
 // GLSL STARTER CODE BY DANIEL S. BUCKSTEIN
+//  -> COMMON TAB (shared with all other tabs)
 
 //------------------------------------------------------------
 // TYPE ALIASES & UTILITY FUNCTIONS
@@ -49,6 +50,12 @@ sVector asVector(in sBasis v)
 
 
 // lengthSq: calculate the squared length of a vector type
+//    x: input whose squared length to calculate
+sScalar lengthSq(sScalar x)
+{
+    return (x * x);
+    //return dot(x, x); // for consistency with others
+}
 sScalar lengthSq(sDCoord x)
 {
     return dot(x, x);
@@ -110,8 +117,9 @@ struct sViewport
 //    focalLength:    input distance between viewer and viewing plane
 //    fragCoord:      input coordinate of current fragment (in pixels)
 //    resolution:     input resolution of screen (in pixels)
-void initViewport(out sViewport vp, in sScalar viewportHeight, in sScalar focalLength, in sCoord fragCoord,
-                  in sDCoord resolution)
+void initViewport(out sViewport vp,
+                  in sScalar viewportHeight, in sScalar focalLength,
+                  in sCoord fragCoord, in sDCoord resolution)
 {
     vp.pixelCoord = fragCoord;
     vp.resolution = resolution;
@@ -166,121 +174,33 @@ void initRayOrtho(out sRay ray,
 
 
 //------------------------------------------------------------
-// RENDERING FUNCTIONS
+/*
+// GLSL FRAGMENT SHADER STRUCTURE WITH COMMON TAB
+//  -> This is (likely) how Shadertoy compiles buffer tabs:
 
-color4 fade(in sCoord loc)
+// latest version or whichever is used
+#version 300 es
+
+// **CONTENTS OF COMMON TAB PASTED HERE**
+
+// PROGRAM UNIFORMS (see 'Shader Inputs' dropdown)
+
+// **CONTENTS OF BUFFER TAB PASTED HERE**
+
+// FRAGMENT SHADER INPUTS (more on this later)
+
+// FRAGMENT SHADER OUTPUTS (framebuffer render target(s))
+//out vec4 rtFragColor; // no specific target
+layout (location = 0) out vec4 rtFragColor; // default
+
+void main()
 {
-    return mix(texture(iChannel0, loc), texture(iChannel2, loc), mod(iTime / 5.0, 1.0));
+    // Call 'mainImage' in actual shader main, which is 
+	// 	our prototyping interface for ease of use.
+	//		rtFragColor:  shader output passed by reference,
+	//			full vec4 read in 'mainImage' as 'fragColor'
+	//		gl_FragCoord: GLSL's built-in pixel coordinate,
+	//			vec2 part read in 'mainImage' as 'fragCoord'
+    mainImage(rtFragColor, gl_FragCoord.xy);
 }
-
-sCoord wave(in sCoord originalLocation)
-{
-    sCoord deformedLocation;
-    
-    mat2 mat = mat2(vec2(cos(iTime), sin(originalLocation.y)),
-                    vec2(-sin(originalLocation.x), cos(originalLocation.y)));
-                    
-    deformedLocation = originalLocation * mat;
-    
-    return deformedLocation;
-}
-
-color4 light(in sCoord loc, in sCoord fragCoord)
-{
-    vec3 normal = vec3(0, 0, 1);
-    
-    vec3 lightPos = vec3(iResolution.x * 0.5 * (cos(iTime) + 1.0), iResolution.y * 0.5, 50);
-    
-    vec3 L; // Light vector
-    float Kd; // Diffuse coefficient
-    float Il; // Intensity
-    float d; // Distance
-    float Il2; // Attenuated intensity
-    float Id; // Diffuse intensity
-    
-    L = normalize(lightPos - vec3(fragCoord, 0.0));
-    Kd = max(0.0, dot(normal, L));
-    
-    Il = 1.0;
-    d = distance(lightPos, vec3(fragCoord, 0.0));
-    Il2 = 1.0 / (1.0 + d / Il) * (1.0 + d / Il);
-    
-    Id = Kd * Il2;
-    
-    return texture(iChannel2, loc) * vec4(1.0, 1.0, 1.0, 1.0) * Id;
-}
-
-color4 cubeRotate(in vec3 cubeLoc, in sCoord fragCoord)
-{
-    vec3 normal = vec3(0, 0, 1);
-    
-    vec3 lightPos = vec3(iMouse.x, iMouse.y, 50);
-    
-    vec3 L; // Light vector
-    float Kd; // Diffuse coefficient
-    float Il; // Intensity
-    float d; // Distance
-    float Il2; // Attenuated intensity
-    float Id; // Diffuse intensity
-    
-    L = normalize(lightPos - vec3(fragCoord, 0.0));
-    Kd = max(0.0, dot(normal, L));
-    
-    Il = 1.0;
-    d = distance(lightPos, vec3(fragCoord, 0.0));
-    Il2 = 1.0 / (1.0 + d / Il) * (1.0 + d / Il);
-    
-    Id = Kd * Il2;
-    
-    return texture(iChannel1, cubeLoc) * vec4(1.0, 1.0, 1.0, 1.0) * Id;
-}
-
-
-// calcColor: calculate the color of current pixel
-//	  vp:  input viewport info
-//	  ray: input ray info
-color4 calcColor(in sViewport vp, in sRay ray, in sCoord fragCoord)
-{
-    
-    sCoord px = vp.pixelCoord;
-    sDCoord res = iChannelResolution[0].xy;
-    sScalar ratio = res.y * vp.resolutionInv.y;
-    sCoord loc = px / res;
-    loc = ratio * loc + 0.25;
-    vec3 cubeLoc = ray.direction.xyz;
-    
-    return texture(iChannel0, loc); // Base image
-    
-    return fade(loc); // Cross fade
-    
-    return texture(iChannel0, wave(loc)); // Distortion
-    
-    return light(loc, fragCoord); // Lighting
-    
-    return cubeRotate(cubeLoc, fragCoord); // Cube 
-}
-
-
-//------------------------------------------------------------
-// SHADERTOY MAIN
-
-// mainImage: process the current pixel (exactly one call per pixel)
-//    fragColor: output final color for current pixel
-//    fragCoord: input location of current pixel in image (in pixels)
-void mainImage(out color4 fragColor, in sCoord fragCoord)
-{
-    // viewing plane (viewport) inputs
-    const sBasis eyePosition = sBasis(0.0);
-    const sScalar viewportHeight = 2.0, focalLength = 1.5;
-    
-    // viewport info
-    sViewport vp;
-
-    // ray
-    sRay ray;
-    
-    // render
-    initViewport(vp, viewportHeight, focalLength, fragCoord, iResolution.xy);
-    initRayPersp(ray, eyePosition, vp.viewportPoint.xyz);
-    fragColor += calcColor(vp, ray, fragCoord);
-}
+*/
