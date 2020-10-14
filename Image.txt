@@ -1,6 +1,10 @@
 // GLSL STARTER CODE BY DANIEL S. BUCKSTEIN
 //  -> IMAGE TAB (final)
 
+color4 screen(in vec4 color1, in vec4 color2)
+{
+    return 1.0 - (1.0 - color1) * (1.0 - color2);
+}
 //------------------------------------------------------------
 // SHADERTOY MAIN
 
@@ -15,5 +19,18 @@ void mainImage(out color4 fragColor, in sCoord fragCoord)
     
     // TESTING
     // set iChannel0 to 'Misc/Buffer A' and fetch sample
-    fragColor = texture(iChannel2, uv);
+    
+    fragColor = texture(iChannel0, uv); // Base map
+    
+    //fragColor = texture(iChannel1, uv); // Bright pass
+    
+    //fragColor = texture(iChannel2, uv); // Blur
+    
+    //fragColor = texture(iChannel0, uv) + texture(iChannel2, uv); // Addition
+    
+    //fragColor = mix(texture(iChannel0, uv), texture(iChannel2, uv), 0.5); // Mix
+    
+    //fragColor = screen(texture(iChannel0, uv), texture(iChannel2, uv)); // Screen
+    
+    //fragColor = texture(iChannel0, uv) * texture(iChannel2, uv); // Multiply
 }
