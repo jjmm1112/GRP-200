@@ -1,5 +1,5 @@
 // GLSL STARTER CODE BY DANIEL S. BUCKSTEIN
-//  -> IMAGE TAB (final)
+//  -> BUFFER C TAB (blur)
 
 //------------------------------------------------------------
 // SHADERTOY MAIN
@@ -11,9 +11,49 @@ void mainImage(out color4 fragColor, in sCoord fragCoord)
 {
     // setup
     // test UV for input image
-    sCoord uv = fragCoord / iChannelResolution[0].xy;
+    sCoord ResInver = 1.0 / iChannelResolution[0].xy;
+    sCoord uv = fragCoord * ResInver;
     
-    // TESTING
-    // set iChannel0 to 'Misc/Buffer A' and fetch sample
-    fragColor = texture(iChannel0, uv);
+	vec4 val = vec4(0.0);
+    
+    // Row 1
+    val += texture(iChannel0, sCoord(fragCoord.x - 2.0, fragCoord.y - 2.0) * ResInver) * 1.0;
+    val += texture(iChannel0, sCoord(fragCoord.x - 1.0, fragCoord.y - 2.0) * ResInver) * 4.0;
+    val += texture(iChannel0, sCoord(fragCoord.x      , fragCoord.y - 2.0) * ResInver) * 7.0;
+    val += texture(iChannel0, sCoord(fragCoord.x + 1.0, fragCoord.y - 2.0) * ResInver) * 4.0;
+    val += texture(iChannel0, sCoord(fragCoord.x - 2.0, fragCoord.y - 2.0) * ResInver) * 1.0;
+    
+    // Row 2
+    val += texture(iChannel0, sCoord(fragCoord.x - 2.0, fragCoord.y - 1.0) * ResInver) * 4.0;
+    val += texture(iChannel0, sCoord(fragCoord.x - 1.0, fragCoord.y - 1.0) * ResInver) * 16.0;
+    val += texture(iChannel0, sCoord(fragCoord.x      , fragCoord.y - 1.0) * ResInver) * 26.0;
+    val += texture(iChannel0, sCoord(fragCoord.x + 1.0, fragCoord.y - 1.0) * ResInver) * 16.0;
+    val += texture(iChannel0, sCoord(fragCoord.x - 2.0, fragCoord.y - 1.0) * ResInver) * 4.0;
+    
+    // Row 3
+    val += texture(iChannel0, sCoord(fragCoord.x - 2.0, fragCoord.y) * ResInver) * 7.0;
+    val += texture(iChannel0, sCoord(fragCoord.x - 1.0, fragCoord.y) * ResInver) * 26.0;
+    val += texture(iChannel0, sCoord(fragCoord.x      , fragCoord.y) * ResInver) * 41.0;
+    val += texture(iChannel0, sCoord(fragCoord.x + 1.0, fragCoord.y) * ResInver) * 26.0;
+    val += texture(iChannel0, sCoord(fragCoord.x - 2.0, fragCoord.y) * ResInver) * 7.0;
+    
+    // Row 4
+    val += texture(iChannel0, sCoord(fragCoord.x - 2.0, fragCoord.y + 1.0) * ResInver) * 4.0;
+    val += texture(iChannel0, sCoord(fragCoord.x - 1.0, fragCoord.y + 1.0) * ResInver) * 16.0;
+    val += texture(iChannel0, sCoord(fragCoord.x      , fragCoord.y + 1.0) * ResInver) * 26.0;
+    val += texture(iChannel0, sCoord(fragCoord.x + 1.0, fragCoord.y + 1.0) * ResInver) * 16.0;
+    val += texture(iChannel0, sCoord(fragCoord.x - 2.0, fragCoord.y + 1.0) * ResInver) * 4.0;
+    
+    // Row 5
+    val += texture(iChannel0, sCoord(fragCoord.x - 2.0, fragCoord.y + 2.0) * ResInver) * 1.0;
+    val += texture(iChannel0, sCoord(fragCoord.x - 1.0, fragCoord.y + 2.0) * ResInver) * 4.0;
+    val += texture(iChannel0, sCoord(fragCoord.x      , fragCoord.y + 2.0) * ResInver) * 7.0;
+    val += texture(iChannel0, sCoord(fragCoord.x + 1.0, fragCoord.y + 2.0) * ResInver) * 4.0;
+    val += texture(iChannel0, sCoord(fragCoord.x - 2.0, fragCoord.y + 2.0) * ResInver) * 1.0;
+    
+    
+    val = val / 273.0;
+    
+    fragColor = val;
+    //fragColor = texture(iChannel0, uv);
 }
