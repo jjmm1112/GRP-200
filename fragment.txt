@@ -1,1 +1,13 @@
-// empty shader file
+#version 300 es
+
+#ifdef GL_ES
+precision highp float;
+#endif // GL_ES
+
+layout(location = 0) out vec4 rtFragColor;
+//out vec4 rtFragColor; //Automatic way
+
+void main()
+{
+	rtFragColor = vec4(0.5, 1, 0, 1);
+}
