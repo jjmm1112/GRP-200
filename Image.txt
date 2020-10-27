@@ -1,4 +1,5 @@
 // GLSL STARTER CODE BY DANIEL S. BUCKSTEIN
+// Light code from lab 5
 
 struct sRectangle
 {
@@ -6,14 +7,16 @@ struct sRectangle
     float width;
     float height;
 };
-    
+
+
 void initRectangle(out sRectangle rectangle, in vec2 pos, in float width, in float height)
 {
     rectangle.pos = pos;
     rectangle.width = width;
     rectangle.height = height;
 }
-    
+
+// Checks if given coords are within the given rectangle
 bool inRectangle(in vec2 pixelCoord, in sRectangle rectangle)
 {
 	if ((pixelCoord.x > rectangle.pos.x - rectangle.width) &&
@@ -128,6 +131,9 @@ vec4 calcColor(in sViewport vp, in sRay ray)
     
     if(iMouse.z > 0.0) // sets light pos to start if not clicking
     	lightPos = vec3(iMouse.x, iMouse.y, 1.5);
+    
+    if(iMouse.x >= iResolution.x - 5.0) // debug to show full map
+        lightPos = vec3(iMouse.x, iMouse.y, 1000);
     
     vec3 L; // Light vector
     float Kd; // Diffuse coefficient
