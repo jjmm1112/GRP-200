@@ -29,6 +29,7 @@ bool inRectangle(in vec2 pixelCoord, in sRectangle rectangle)
 
 vec4 calcColor(in sViewport vp, in sRay ray)
 {
+    // Border walls
     sRectangle rLWallTop;
     initRectangle(rLWallTop,    vec2(0.02, 0.77), 0.02, 0.23);
     
@@ -47,12 +48,68 @@ vec4 calcColor(in sViewport vp, in sRay ray)
     sRectangle rBWall;
     initRectangle(rBWall,       vec2(0.50, 0.03), 1.00, 0.03);
     
-    sRectangle[] sRectangles = sRectangle[] (rLWallTop, rLWallBotton, rRWallTop, rRWallBotton, rTWall, rBWall);
+    // Inner walls
+    sRectangle rIWall1;
+    initRectangle(rIWall1,  vec2(0.1, 0.58), 0.02, 0.44);
     
-    for(int i = 0; i < 6; i++)
+    sRectangle rIWall2;
+    initRectangle(rIWall2,  vec2(0.16, 0.17), 0.04, 0.03);
+    
+    sRectangle rIWall3;
+    initRectangle(rIWall3,  vec2(0.18, 0.3), 0.02, 0.1);
+    
+    sRectangle rIWall4;
+    initRectangle(rIWall4,  vec2(0.18, 0.68), 0.02, 0.2);
+    
+    sRectangle rIWall5;
+    initRectangle(rIWall5,  vec2(0.45, 0.85), 0.25, 0.03);
+    
+    sRectangle rIWall6;
+    initRectangle(rIWall6,  vec2(0.83, 0.85), 0.08, 0.03);
+    
+    sRectangle rIWall7;
+    initRectangle(rIWall7,  vec2(0.89, 0.7), 0.02, 0.16);
+    
+    sRectangle rIWall8;
+    initRectangle(rIWall8,  vec2(0.8, 0.57), 0.16, 0.03);
+    
+    sRectangle rIWall9;
+    initRectangle(rIWall9,  vec2(0.54, 0.71), 0.29, 0.03);
+    
+    sRectangle rIWall10;
+    initRectangle(rIWall10, vec2(0.66, 0.63), 0.02, 0.09);
+    
+    sRectangle rIWall11;
+    initRectangle(rIWall11, vec2(0.69, 0.44), 0.36, 0.03);
+    
+    sRectangle rIWall12;
+    initRectangle(rIWall12, vec2(0.26, 0.44), 0.02, 0.3);
+    
+    sRectangle rIWall13;
+    initRectangle(rIWall13, vec2(0.69, 0.57), 0.36, 0.03);
+    
+    sRectangle rIWall14;
+    initRectangle(rIWall14, vec2(0.6, 0.17), 0.32, 0.03);
+    
+    sRectangle rIWall15;
+    initRectangle(rIWall15, vec2(0.45, 0.76), 0.02, 0.08);
+    
+    sRectangle rIWall16;
+    initRectangle(rIWall16, vec2(0.6, 0.3), 0.32, 0.03);
+    
+
+    sRectangle[] sRectangles = sRectangle[] (rLWallTop, rLWallBotton, rRWallTop, rRWallBotton, rTWall, rBWall,
+                                            rIWall1, rIWall2, rIWall3, rIWall4, rIWall5, rIWall6, rIWall7,
+                                            rIWall8, rIWall9, rIWall10, rIWall11, rIWall12, rIWall13, rIWall14,
+                                            rIWall15, rIWall16);
+    
+    for(int i = 0; i < sRectangles.length(); i++)
     {
         if(inRectangle(vp.uv, sRectangles[i]))
         {
+            if(i - 5 == -6)
+                return vec4(1.0, 0.0, 0.0, 1.0);
+            
             return vec4(1.0);
         }
     }
