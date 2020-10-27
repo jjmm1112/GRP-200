@@ -29,6 +29,8 @@ bool inRectangle(in vec2 pixelCoord, in sRectangle rectangle)
 
 vec4 calcColor(in sViewport vp, in sRay ray)
 {
+    vec4 color = texture(iChannel0, vp.uv);
+    
     // Border walls
     sRectangle rLWallTop;
     initRectangle(rLWallTop,    vec2(0.02, 0.77), 0.02, 0.23);
@@ -97,24 +99,53 @@ vec4 calcColor(in sViewport vp, in sRay ray)
     sRectangle rIWall16;
     initRectangle(rIWall16, vec2(0.6, 0.3), 0.32, 0.03);
     
-
+	// List of all walls
     sRectangle[] sRectangles = sRectangle[] (rLWallTop, rLWallBotton, rRWallTop, rRWallBotton, rTWall, rBWall,
                                             rIWall1, rIWall2, rIWall3, rIWall4, rIWall5, rIWall6, rIWall7,
                                             rIWall8, rIWall9, rIWall10, rIWall11, rIWall12, rIWall13, rIWall14,
                                             rIWall15, rIWall16);
     
+    // checks if pixel is in any rectanle
     for(int i = 0; i < sRectangles.length(); i++)
     {
         if(inRectangle(vp.uv, sRectangles[i]))
         {
             if(i - 5 == -6)
-                return vec4(1.0, 0.0, 0.0, 1.0);
+            {
+                color = vec4(1.0, 0.0, 0.0, 1.0);
+                break;
+            }
             
-            return vec4(1.0);
+            //return vec4(0.0);
+            color = vec4(0.7, 0.3, 0.0, 1.0);
+            break;
         }
     }
     
-    return vec4(0.0, 0.0, 0.0, 1.0);
+    vec3 normal = vec3(0, 0, 1);
+    
+    vec3 lightPos = vec3(0.02 * iResolution.x, 0.5 * iResolution.y, 1.5);
+    
+    if(iMouse.z > 0.0) // sets light pos to start if not clicking
+    	lightPos = vec3(iMouse.x, iMouse.y, 1.5);
+    
+    vec3 L; // Light vector
+    float Kd; // Diffuse coefficient
+    float Il; // Intensity
+    float d; // Distance
+    float Il2; // Attenuated intensity
+    float Id; // Diffuse intensity
+    
+    L = normalize(lightPos - vec3(vp.pixelCoord, 0.0));
+    Kd = max(0.0, dot(normal, L));
+    
+    Il = 1.0;
+    d = distance(lightPos, vec3(vp.pixelCoord, 0.0));
+    Il2 = 1.0 / (1.0 + d / Il) * (1.0 + d / Il);
+    
+    Id = Kd * Il2;
+    
+    return color * vec4(1.0, 1.0, 1.0, 1.0) * Id;
     
 }
 
