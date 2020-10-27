@@ -1,36 +1,70 @@
 // GLSL STARTER CODE BY DANIEL S. BUCKSTEIN
-//  -> IMAGE TAB (final)
 
-color4 screen(in vec4 color1, in vec4 color2)
+struct sRectangle
 {
-    return 1.0 - (1.0 - color1) * (1.0 - color2);
+ 	vec2 pos;
+    float width;
+    float height;
+};
+    
+void initRectangle(out sRectangle rectangle, in vec2 pos, in float width, in float height)
+{
+    rectangle.pos = pos;
+    rectangle.width = width;
+    rectangle.height = height;
 }
-//------------------------------------------------------------
-// SHADERTOY MAIN
-
-// mainImage: process the current pixel (exactly one call per pixel)
-//    fragColor: output final color for current pixel
-//    fragCoord: input location of current pixel in image (in pixels)
-void mainImage(out color4 fragColor, in sCoord fragCoord)
+    
+bool inRectangle(in vec2 fragCoord, in sRectangle rectangle)
 {
-    // setup
-    // test UV for input image
-    sCoord uv = fragCoord / iChannelResolution[0].xy;
+	if ((fragCoord.x > rectangle.pos.x - rectangle.width / 2.0) &&
+        (fragCoord.x < rectangle.pos.x + rectangle.width / 2.0) &&
+        (fragCoord.y > rectangle.pos.y - rectangle.height / 2.0) &&
+        (fragCoord.y < rectangle.pos.y + rectangle.height / 2.0)) 
+    {
+		return true;
+	}
     
-    // TESTING
-    // set iChannel0 to 'Misc/Buffer A' and fetch sample
+	return false;
+}
+
+vec4 calcColor(in sViewport vp, in sRay ray)
+{
+    sRectangle rec1;
+    initRectangle(rec1, vec2(20.0f, 20.0f), 20.0f, 40.0f);
     
-    fragColor = texture(iChannel0, uv); // Base map
+    sRectangle rec2;
+    initRectangle(rec2, vec2(120.0f, 20.0f), 20.0f, 40.0f);
     
-    //fragColor = texture(iChannel1, uv); // Bright pass
+    sRectangle[] sRectangles = sRectangle[] (rec1, rec2);
     
-    //fragColor = texture(iChannel2, uv); // Blur
+    for(int i = 0; i < 2; i++)
+    {
+        if(inRectangle(vp.pixelCoord, sRectangles[i]))
+        {
+            return vec4(1.0);
+        }
+    }
     
-    //fragColor = texture(iChannel0, uv) + texture(iChannel2, uv); // Addition
+    return vec4(0.0, 0.0, 0.0, 1.0);
     
-    //fragColor = mix(texture(iChannel0, uv), texture(iChannel2, uv), 0.5); // Mix
+}
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+   // viewing plane (viewport) inputs
+    const sBasis eyePosition = sBasis(0.0);
+    const sScalar viewportHeight = 2.0, focalLength = 1.5;
     
-    //fragColor = screen(texture(iChannel0, uv), texture(iChannel2, uv)); // Screen
+    // viewport info
+    sViewport vp;
+
+    // ray
+    sRay ray;
     
-    //fragColor = texture(iChannel0, uv) * texture(iChannel2, uv); // Multiply
+    // render
+    initViewport(vp, viewportHeight, focalLength, fragCoord, iResolution.xy);
+    initRayPersp(ray, eyePosition, vp.viewportPoint.xyz);
+
+    // Output to screen
+    fragColor = calcColor(vp, ray);
 }

@@ -117,9 +117,8 @@ struct sViewport
 //    focalLength:    input distance between viewer and viewing plane
 //    fragCoord:      input coordinate of current fragment (in pixels)
 //    resolution:     input resolution of screen (in pixels)
-void initViewport(out sViewport vp,
-                  in sScalar viewportHeight, in sScalar focalLength,
-                  in sCoord fragCoord, in sDCoord resolution)
+void initViewport(out sViewport vp,in sScalar viewportHeight, in sScalar focalLength, in sCoord fragCoord,
+                  in sDCoord resolution)
 {
     vp.pixelCoord = fragCoord;
     vp.resolution = resolution;
@@ -149,8 +148,7 @@ struct sRay
 //    ray: 		   output ray
 //    eyePosition: position of viewer in scene
 //    viewport:    input viewing plane offset
-void initRayPersp(out sRay ray,
-             	  in sBasis eyePosition, in sBasis viewport)
+void initRayPersp(out sRay ray, in sBasis eyePosition, in sBasis viewport)
 {
     // ray origin relative to viewer is the origin
     // w = 1 because it represents a point; can ignore when using
@@ -165,8 +163,7 @@ void initRayPersp(out sRay ray,
 //    ray: 		   output ray
 //    eyePosition: position of viewer in scene
 //    viewport:    input viewing plane offset
-void initRayOrtho(out sRay ray,
-             	  in sBasis eyePosition, in sBasis viewport)
+void initRayOrtho(out sRay ray, in sBasis eyePosition, in sBasis viewport)
 {
     // offset eye position to point on plane at the same depth
     initRayPersp(ray, eyePosition + sBasis(viewport.xy, 0.0), viewport);
