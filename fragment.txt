@@ -7,7 +7,10 @@ precision highp float;
 layout(location = 0) out vec4 rtFragColor;
 //out vec4 rtFragColor; //Automatic way
 
+in vec4 vColor;
+
 void main()
 {
-	rtFragColor = vec4(0.5, 1, 0, 1);
+	//rtFragColor = vec4(0.5, 1, 0, 1);
+	rtFragColor = vColor;
 }

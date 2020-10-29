@@ -7,9 +7,30 @@
 layout(location = 0) in vec4 aPosition;
 //in vec4 aPosition;
 
+// transform uniforms
+uniform mat4 uModelMat;
+uniform mat4 uViewMat;
+uniform mat4 uProjectionMat;
+
+out vec4 vColor;
 
 void main()
 {
 	// REQUIRED: write to this variable
-	gl_Position = aPosition;
+	//gl_Position = aPosition;
+	
+	// pos in world space(not yet correct)
+	vec4 pos_world = uModelMat * aPosition;
+	//gl_Position = pos_world;
+	
+	// pos in camera space (still not correct)
+	vec4 pos_view = uViewMat * pos_world;
+	//gl_Position = pos_view;
+	
+	// pos in clip space
+	vec4 pos_clip = uProjectionMat * pos_view;
+	gl_Position = pos_clip;
+	
+	//vColor = vec4(1, 0.5, 0, 1);
+	vColor = aPosition;
 }
