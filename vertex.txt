@@ -5,6 +5,7 @@
 // normal vector
 // uv: texture coordinate
 layout(location = 0) in vec4 aPosition;
+layout(location = 1) in vec3 aNormal;
 //in vec4 aPosition;
 
 // transform uniforms
@@ -12,7 +13,11 @@ uniform mat4 uModelMat;
 uniform mat4 uViewMat;
 uniform mat4 uProjectionMat;
 
-out vec4 vColor;
+// Per Vertex: pass final color
+//out vec4 vColor;
+
+//Per Fragment pass requirements for final color
+out vec4 vNormal;
 
 void main()
 {
@@ -20,17 +25,31 @@ void main()
 	//gl_Position = aPosition;
 	
 	// pos in world space(not yet correct)
-	vec4 pos_world = uModelMat * aPosition;
+	//vec4 pos_world = uModelMat * aPosition;
 	//gl_Position = pos_world;
 	
 	// pos in camera space (still not correct)
-	vec4 pos_view = uViewMat * pos_world;
+	//vec4 pos_view = uViewMat * pos_world;
 	//gl_Position = pos_view;
+	
+	// Position pipeline
+	mat4 modelViewMat = uViewMat * uModelMat;
+	vec4 pos_view = modelViewMat * aPosition;
 	
 	// pos in clip space
 	vec4 pos_clip = uProjectionMat * pos_view;
 	gl_Position = pos_clip;
 	
+	// Normal pipeline
+	mat3 normalMat = transpose(inverse(mat3(modelViewMat)));
+	vec3 normal_view = normalMat * aNormal;
+	
+	
 	//vColor = vec4(1, 0.5, 0, 1);
-	vColor = aPosition;
+	//vColor = aPosition;
+	// example: output normal as color
+	//vColor = vec4(aNormal * 0.5 + 0.5, 1.0);
+	
+	// Per Fragment: output data needed for FS to calc final color
+	vNormal = vec4(normal_view, 0.0);
 }
