@@ -13,6 +13,8 @@ uniform sampler2D uTex;
 void main()
 {
 	vec4 col = texture(uTex, vTexcoord);
+	//vec4 col = vec4(1, 0, 0, 1);
+	//col += vec4(1, 0, 0, 0);
 	
 	rtFragColor = col;
 }
