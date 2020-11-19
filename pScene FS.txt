@@ -9,10 +9,11 @@ layout (location = 0) out vec4 rtFragColor;
 in vec2 vTexcoord;
 
 uniform sampler2D uTex;
+uniform sampler2D uTex2;
 
 void main()
 {
-	vec4 col = texture(uTex, vTexcoord);
-	//col += vec4(1, 0, 0, 0);
+	vec4 col;
+	col = mix(texture(uTex, vTexcoord), texture(uTex2, vTexcoord), 0.5);
 	rtFragColor = col;
 }

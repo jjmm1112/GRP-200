@@ -19,10 +19,7 @@ void main()
 {
 	vec4 col = texture(uTex, vTexcoord);
 	
-	//col += vec4(1, 0, 0, 0);
+	float thresh = .5;
 	
-	float thresh = .3;
-	
-	//rtFragColor = col;
 	rtFragColor = col * clamp(luma(col.rgb) - thresh, 0.0, 1.0) * (1.0 / (1.0 - thresh));
 }

@@ -14,42 +14,43 @@ uniform vec2 res;
 void main()
 {
 	vec2 ResInver = 1.0 / res;
+	vec2 coord = vec2(vTexcoord.x * res.x, vTexcoord.y * res.y);
 	vec4 col = vec4(0);
 	
 	// Row 1
-    col += texture(uTex, vec2(vTexcoord.x - 2.0, vTexcoord.y - 2.0) * ResInver) * 1.0;
-    col += texture(uTex, vec2(vTexcoord.x - 1.0, vTexcoord.y - 2.0) * ResInver) * 4.0;
-    col += texture(uTex, vec2(vTexcoord.x      , vTexcoord.y - 2.0) * ResInver) * 7.0;
-    col += texture(uTex, vec2(vTexcoord.x + 1.0, vTexcoord.y - 2.0) * ResInver) * 4.0;
-    col += texture(uTex, vec2(vTexcoord.x - 2.0, vTexcoord.y - 2.0) * ResInver) * 1.0;
+    col += texture(uTex, vec2(coord.x - 2.0, coord.y - 2.0) * ResInver) * 1.0;
+    col += texture(uTex, vec2(coord.x - 1.0, coord.y - 2.0) * ResInver) * 4.0;
+    col += texture(uTex, vec2(coord.x      , coord.y - 2.0) * ResInver) * 7.0;
+    col += texture(uTex, vec2(coord.x + 1.0, coord.y - 2.0) * ResInver) * 4.0;
+    col += texture(uTex, vec2(coord.x - 2.0, coord.y - 2.0) * ResInver) * 1.0;
     
     // Row 2
-    col += texture(uTex, vec2(vTexcoord.x - 2.0, vTexcoord.y - 1.0) * ResInver) * 4.0;
-    col += texture(uTex, vec2(vTexcoord.x - 1.0, vTexcoord.y - 1.0) * ResInver) * 16.0;
-    col += texture(uTex, vec2(vTexcoord.x      , vTexcoord.y - 1.0) * ResInver) * 26.0;
-    col += texture(uTex, vec2(vTexcoord.x + 1.0, vTexcoord.y - 1.0) * ResInver) * 16.0;
-    col += texture(uTex, vec2(vTexcoord.x - 2.0, vTexcoord.y - 1.0) * ResInver) * 4.0;
+    col += texture(uTex, vec2(coord.x - 2.0, coord.y - 1.0) * ResInver) * 4.0;
+    col += texture(uTex, vec2(coord.x - 1.0, coord.y - 1.0) * ResInver) * 16.0;
+    col += texture(uTex, vec2(coord.x      , coord.y - 1.0) * ResInver) * 26.0;
+    col += texture(uTex, vec2(coord.x + 1.0, coord.y - 1.0) * ResInver) * 16.0;
+    col += texture(uTex, vec2(coord.x - 2.0, coord.y - 1.0) * ResInver) * 4.0;
     
     // Row 3
-    col += texture(uTex, vec2(vTexcoord.x - 2.0, vTexcoord.y) * ResInver) * 7.0;
-    col += texture(uTex, vec2(vTexcoord.x - 1.0, vTexcoord.y) * ResInver) * 26.0;
-    col += texture(uTex, vec2(vTexcoord.x      , vTexcoord.y) * ResInver) * 41.0;
-    col += texture(uTex, vec2(vTexcoord.x + 1.0, vTexcoord.y) * ResInver) * 26.0;
-    col += texture(uTex, vec2(vTexcoord.x - 2.0, vTexcoord.y) * ResInver) * 7.0;
+    col += texture(uTex, vec2(coord.x - 2.0, coord.y) * ResInver) * 7.0;
+    col += texture(uTex, vec2(coord.x - 1.0, coord.y) * ResInver) * 26.0;
+    col += texture(uTex, vec2(coord.x      , coord.y) * ResInver) * 41.0;
+    col += texture(uTex, vec2(coord.x + 1.0, coord.y) * ResInver) * 26.0;
+    col += texture(uTex, vec2(coord.x - 2.0, coord.y) * ResInver) * 7.0;
     
     // Row 4
-    col += texture(uTex, vec2(vTexcoord.x - 2.0, vTexcoord.y + 1.0) * ResInver) * 4.0;
-    col += texture(uTex, vec2(vTexcoord.x - 1.0, vTexcoord.y + 1.0) * ResInver) * 16.0;
-    col += texture(uTex, vec2(vTexcoord.x      , vTexcoord.y + 1.0) * ResInver) * 26.0;
-    col += texture(uTex, vec2(vTexcoord.x + 1.0, vTexcoord.y + 1.0) * ResInver) * 16.0;
-    col += texture(uTex, vec2(vTexcoord.x - 2.0, vTexcoord.y + 1.0) * ResInver) * 4.0;
+    col += texture(uTex, vec2(coord.x - 2.0, coord.y + 1.0) * ResInver) * 4.0;
+    col += texture(uTex, vec2(coord.x - 1.0, coord.y + 1.0) * ResInver) * 16.0;
+    col += texture(uTex, vec2(coord.x      , coord.y + 1.0) * ResInver) * 26.0;
+    col += texture(uTex, vec2(coord.x + 1.0, coord.y + 1.0) * ResInver) * 16.0;
+    col += texture(uTex, vec2(coord.x - 2.0, coord.y + 1.0) * ResInver) * 4.0;
     
     // Row 5
-    col += texture(uTex, vec2(vTexcoord.x - 2.0, vTexcoord.y + 2.0) * ResInver) * 1.0;
-    col += texture(uTex, vec2(vTexcoord.x - 1.0, vTexcoord.y + 2.0) * ResInver) * 4.0;
-    col += texture(uTex, vec2(vTexcoord.x      , vTexcoord.y + 2.0) * ResInver) * 7.0;
-    col += texture(uTex, vec2(vTexcoord.x + 1.0, vTexcoord.y + 2.0) * ResInver) * 4.0;
-    col += texture(uTex, vec2(vTexcoord.x - 2.0, vTexcoord.y + 2.0) * ResInver) * 1.0;
+    col += texture(uTex, vec2(coord.x - 2.0, coord.y + 2.0) * ResInver) * 1.0;
+    col += texture(uTex, vec2(coord.x - 1.0, coord.y + 2.0) * ResInver) * 4.0;
+    col += texture(uTex, vec2(coord.x      , coord.y + 2.0) * ResInver) * 7.0;
+    col += texture(uTex, vec2(coord.x + 1.0, coord.y + 2.0) * ResInver) * 4.0;
+    col += texture(uTex, vec2(coord.x - 2.0, coord.y + 2.0) * ResInver) * 1.0;
     
     
     col = col / 273.0;
